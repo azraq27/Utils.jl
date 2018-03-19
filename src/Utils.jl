@@ -50,7 +50,7 @@ end
 
 # SIGNAL PROCESSING / STATS
 
-z{T<:Real,K<:Real,N}(p::AbstractArray{T,N}) = (p-mean(p))/std(p)
+z{T<:Real,N}(p::AbstractArray{T,N}) = (p-mean(p))/std(p)
 
 polyparams{T<:Real}(x::AbstractArray{T,1},n::Integer) = [ float(x[i])^p for i = 1:length(x), p = 0:n ]
 polyfit{T<:Real}(y::AbstractArray{T,1},n::Integer) = polyparams(collect(1:length(y)),n) \ y
