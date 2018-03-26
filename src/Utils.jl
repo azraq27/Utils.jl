@@ -34,18 +34,21 @@ function lock_file(func::Function,fname::AbstractString;timeout=30)
     end
 end
 
-function timeout(expr,t::Integer)
+type TimeoutException <: Exception
+end
+
+function timeout{T<:Real}(expr,t::T)
     s = schedule(Task(expr))
     start_time = time()
     while (! istaskdone(s)) && (time() - start_time) < t
         sleep(0.1)
     end
     if ! istaskdone(s)
-        warn("Task timeout")
-        return (false,s)
-    else
-        return (true,yieldto(s))
+        s.state = :done
+        throw(TimeoutException)
     end
+
+    return yieldto(s)
 end
 
 # SIGNAL PROCESSING / STATS
