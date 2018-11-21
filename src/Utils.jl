@@ -34,10 +34,10 @@ function lock_file(func::Function,fname::AbstractString;timeout=30)
     end
 end
 
-type TimeoutException <: Exception
+struct TimeoutException <: Exception
 end
 
-function timeout{T<:Real}(expr,t::T)
+function timeout(expr,t::T) where {T<:Real}
     s = schedule(Task(expr))
     start_time = time()
     while (! istaskdone(s)) && (time() - start_time) < t
@@ -53,10 +53,10 @@ end
 
 # SIGNAL PROCESSING / STATS
 
-z{T<:Real,N}(p::AbstractArray{T,N}) = (p-mean(p))/std(p)
+z(p::AbstractArray{T,N}) where {T<:Real,N} = (p-mean(p))/std(p)
 
-polyparams{T<:Real}(x::AbstractArray{T,1},n::Integer) = [ float(x[i])^p for i = 1:length(x), p = 0:n ]
-polyfit{T<:Real}(y::AbstractArray{T,1},n::Integer) = polyparams(collect(1:length(y)),n) \ y
+polyparams(x::AbstractArray{T,1},n::Integer) where {T<:Real} = [ float(x[i])^p for i = 1:length(x), p = 0:n ]
+polyfit(y::AbstractArray{T,1},n::Integer) where {T<:Real} = polyparams(collect(1:length(y)),n) \ y
 polyfitline(len::Integer,params::Array{Float64,1}) = polyparams(collect(1:len),length(params)-1) * params''
 polyeval(x::Real,params::Array{Float64,1}) = [x^p for p=0:length(params)-1]' * params''
 
@@ -119,8 +119,8 @@ function getprecision(b)
     return minimum([abs(a[i]-a[i+1]) for i in 1:length(a)-1])
 end
 
-_isrepeat{T<:Real}(a::AbstractArray{T,1}) = vcat(1,diff(a)) .!= 0
-uniqueinds{T<:Real}(a::AbstractArray{T,1}) = find(_isrepeat(a))
-norepeat{T<:Real}(a::AbstractArray{T,1}) = a[_isrepeat(a)]
+_isrepeat(a::AbstractArray{T,1}) where {T<:Real} = vcat(1,diff(a)) .!= 0
+uniqueinds(a::AbstractArray{T,1}) where {T<:Real} = findall(_isrepeat(a))
+norepeat(a::AbstractArray{T,1}) where {T<:Real} = a[_isrepeat(a)]
 
 end
