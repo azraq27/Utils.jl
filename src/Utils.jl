@@ -123,4 +123,15 @@ _isrepeat(a::AbstractArray{T,1}) where {T<:Real} = vcat(1,diff(a)) .!= 0
 uniqueinds(a::AbstractArray{T,1}) where {T<:Real} = findall(_isrepeat(a))
 norepeat(a::AbstractArray{T,1}) where {T<:Real} = a[_isrepeat(a)]
 
+# I don't know why I so much trouble doing this... this function converts an `Array` into an `Image` using a color map (a `Vector` of colors)
+function colormap_image(a::AbstractArray{T,2},m::Vector{K}) where {T<:Real,K<:Colorant}
+    i = Array{K,2}(undef,size(a))
+    fac = length(m)/maximum(a)
+    for ii in CartesianIndices(a)
+        i[ii] = m[round(Int,fac*a[ii])]
+    end
+    return i
+end
+
+
 end
