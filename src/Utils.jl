@@ -131,7 +131,7 @@ function colormap_image(a::AbstractArray{T,2},m::Vector{K}) where {T<:Real,K<:Co
     i = Array{K,2}(undef,size(a))
     fac = length(m)/maximum(a)
     for ii in CartesianIndices(a)
-        i[ii] = m[round(Int,fac*a[ii])]
+        i[ii] = m[min(1,round(Int,fac*a[ii]))]
     end
     return i
 end
