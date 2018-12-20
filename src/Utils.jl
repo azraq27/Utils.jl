@@ -78,9 +78,9 @@ end
 
 # List utilities
 
-function cluster(a,dist)
-    sa = sort(a)
-    da = [abs(sa[i]-sa[i+1]) for i=1:length(sa)-1]
+function cluster(a,dist;by=identity)
+    sa = sort(a,by=by)
+    da = [abs(by(sa[i])-by(sa[i+1])) for i=1:length(sa)-1]
     clustered = typeof(a)[]
     push!(clustered,typeof(a)())
     push!(clustered[end],sa[1])
