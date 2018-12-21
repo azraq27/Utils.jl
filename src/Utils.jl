@@ -127,9 +127,9 @@ norepeat(a::AbstractArray{T,1}) where {T<:Real} = a[_isrepeat(a)]
 
 using Colors
 
-function colormap_image(a::AbstractArray{T,2},m::Vector{K}) where {T<:Real,K<:Colorant}
+function colormap_image(a::AbstractArray{T,2},m::Vector{K},scale::L=maximum(a)) where {T<:Real,K<:Colorant,L<:Real}
     i = Array{K,2}(undef,size(a))
-    fac = length(m)/maximum(a)
+    fac = length(m)/scale
     for ii in CartesianIndices(a)
         i[ii] = m[max(1,round(Int,fac*a[ii]))]
     end
