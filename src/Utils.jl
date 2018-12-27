@@ -80,13 +80,13 @@ end
 
 function cluster(a,dist;by=identity,sorted=false)
     sorted || (a = sort(a,by=by))
-    da = [abs(by(sa[i])-by(sa[i+1])) for i=1:length(sa)-1]
+    da = [abs(by(a[i])-by(a[i+1])) for i=1:length(a)-1]
     clustered = typeof(a)[]
     push!(clustered,typeof(a)())
-    push!(clustered[end],sa[1])
-    for i=2:length(sa)
+    push!(clustered[end],a[1])
+    for i=2:length(a)
         da[i-1]>dist && push!(clustered,typeof(a)())
-        push!(clustered[end],sa[i])
+        push!(clustered[end],a[i])
     end
     return clustered
 end
