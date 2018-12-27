@@ -78,8 +78,8 @@ end
 
 # List utilities
 
-function cluster(a,dist;by=identity)
-    sa = sort(a,by=by)
+function cluster(a,dist;by=identity,sorted=false)
+    sorted || (a = sort(a,by=by))
     da = [abs(by(sa[i])-by(sa[i+1])) for i=1:length(sa)-1]
     clustered = typeof(a)[]
     push!(clustered,typeof(a)())
